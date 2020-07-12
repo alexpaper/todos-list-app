@@ -1,24 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import Todosinfinite from './Todosinfinite'
+import Home from './home.svg'
 
 function App() {
+const [msg, setMsg] = React.useState("Hey don't be lazy, complete yours todos!")
+
+// React Use Effect Message
+React.useEffect(()=>{
+  setTimeout(()=>{
+    setMsg('')
+  }, 10000);
+},[msg]);
+
+
+// ─── RETURN ─────────────────────────────────────────────────────────────────────
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+       <a href="/catalog" className='home'>
+        <img src={Home} alt="home-img" />
+    </a>
+
+      <Todosinfinite msg={msg} setMsg={setMsg}  />
     </div>
   );
 }
