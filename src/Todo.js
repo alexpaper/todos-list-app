@@ -3,14 +3,13 @@ import Update from './update.svg'
 import Complete from './complete.svg'
 import Delete from './delete.svg'
 import Enter from './enterarrow.svg'
-
+// Export
 export default function Todo({dispatch, todo, ACTIONS, setMsg}) {
-    // Set Deletin STATE
+    // Set Deleting STATE
     const [deleting, setDeleting] = React.useState(false);
     const [textValue, setTextValue] = React.useState(todo.todo);
     // ADD ZERO FUNCTION
     const addZero = (num) => {
-       
         // if is lower to 10 add 0 otherwise do nothing
         return (parseInt(num, 10) < 10 ? '0' : '') + num;
     }
@@ -46,10 +45,6 @@ export default function Todo({dispatch, todo, ACTIONS, setMsg}) {
         // Dispatch
         dispatch({type: ACTIONS.COMPLETE_TODO, payload:{id:todo.id}});
     }
-
-    // Select DOM elements
-    
-
     // Handle Update
     const handleUpdate = ()=>{
         // Select text area and show it

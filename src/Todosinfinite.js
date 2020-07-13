@@ -1,12 +1,13 @@
+// Import
 import React from 'react'
 import Todo from './Todo'
 import Enter from './enterarrow.svg'
 import Empty from './fuel.svg'
 import List from './list.svg'
-// Export todos
+// Export Todos
 export default function Todos(props) {
-    // Props destructuring
-    const {msg, setMsg} = props;
+// Props destructuring
+const {msg, setMsg} = props;
 
 // ─── ACTIONS EXPORT ─────────────────────────────────────────────────────────────
 const ACTIONS ={
@@ -28,7 +29,7 @@ const ACTIONS ={
         // ─── NEW TODO ──────────────────────────────────────────────────── 
         case ACTIONS.ADD_TODO:
             // Spred todos ... add new todo
-            let allTodos = [...todos, newTodo(action.payload.name)];
+            let allTodos = [...todos, newTodo(action.payload.name)].sort((a,b)=> b.id - a.id );
             // Save in the local storage
             localStorage.setItem('todos', JSON.stringify(allTodos));
             // Return all todos
@@ -52,6 +53,7 @@ const ACTIONS ={
         case ACTIONS.DELETE_TODO:
         // Filter
         let delTodos = todos.filter(todo => todo.id !== action.payload.id)
+        .sort((a,b)=> b.id - a.id );
         // Save modified todos to local storage
         localStorage.setItem('todos', JSON.stringify(delTodos));
         // Return del todos
@@ -77,7 +79,6 @@ const ACTIONS ={
 // Start Array Reducer 
 let storageArr = [];
 let totalTodos = localStorage.getItem('totalTodos') || 0;
-localStorage.getItem(storageArr)
 // Get items from local storage
 if(JSON.parse(localStorage.getItem('todos')) !== null){
 JSON.parse(localStorage.getItem('todos')).map(t=>{
