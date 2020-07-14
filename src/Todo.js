@@ -8,6 +8,8 @@ export default function Todo({dispatch, todo, ACTIONS, setMsg}) {
     // Set Deleting STATE
     const [deleting, setDeleting] = React.useState(false);
     const [textValue, setTextValue] = React.useState(todo.todo);
+    const [show, setShow] = React.useState(false);
+
     // ADD ZERO FUNCTION
     const addZero = (num) => {
         // if is lower to 10 add 0 otherwise do nothing
@@ -47,13 +49,8 @@ export default function Todo({dispatch, todo, ACTIONS, setMsg}) {
     }
     // Handle Update
     const handleUpdate = ()=>{
-        // Select text area and show it
-    let txtarea = document.querySelector('textarea');
-    let enterBtn = document.querySelector('.enter-arrow-update');
-    let line = document.querySelector('.line');
-        txtarea.classList.toggle('show');
-        enterBtn.classList.toggle('show');
-        line.classList.toggle('hide');
+        setShow(!show)
+    
     }
     // Handle Submit
     const handleSubmit = (e)=>{
@@ -61,25 +58,23 @@ export default function Todo({dispatch, todo, ACTIONS, setMsg}) {
     // Prevent default
     e.preventDefault();
     // Check name length
-    if(textValue.length > 60){
-        return setMsg(`Text length ${textValue.length} to long, max 60`);
+   // Check todo name length
+    if(todo.length > 60){
+    
+        return setMsg(`Todo name length ${todo.length} too long, max 60.`)
     }
-    if(textValue.length === 0){
-        return setMsg(`Text length ${textValue.length} to short, min 4`);
+    if(todo.length === 0){
+        
+        return setMsg(`Todo name length ${todo.length} too short, min 5.`)
     }
-    if(textValue.length <= 5){
-        return setMsg(`Text length ${textValue.length} to short, min 4`);
+    if(todo.length <= 4){
+    
+        return setMsg(`Todo name length ${todo.length} too short, min 5.`)
     }
     // Dispatch
     dispatch({type: ACTIONS.UPDATE_TODO, payload:{id:todo.id, todo:textValue}});
     // Select text area and show it
-    let txtarea = document.querySelector('textarea');
-    let enterBtn = document.querySelector('.enter-arrow-update');
-    let line = document.querySelector('.line');
-    // Reset and hide form
-    txtarea.classList.toggle('show');
-    enterBtn.classList.toggle('show');
-    line.classList.toggle('hide');
+   setShow(false)
     }
  
  // ─── RETURN ─────────────────────────────────────────────────────────────────────
@@ -87,17 +82,18 @@ export default function Todo({dispatch, todo, ACTIONS, setMsg}) {
  return (
         <div className='card' style={deleting ? del : {}}>
         <div className="card-side front">
-        <h4 style={{textDecoration: todo.complete ? 'line-through' : ''}}> {todo.todo}</h4>
+        <h4 className={show ? 'hide' : ''} style={{textDecoration: todo.complete ? 'line-through' : ''}}> {todo.todo}</h4>
         </div> 
         <div className="card-side back">
             <ul>
             <li> <strong>Date: </strong> {newDate}</li>   
-            <li>
-            <span className={todo.complete ? 'line width' : 'line'} style={isComplete}> {todo.todo}</span>
+            <li className={show ? 'hide' : ''}>
+            <span className={todo.complete ? 'line  width' : 'line'} style={isComplete}> {todo.todo}</span>
             </li>  
            <li className='form-update'>
             <form onSubmit={handleSubmit}>
             <textarea 
+            className={show ? 'show' : ''}
             cols="30" 
             rows="5"
             value= {textValue}
@@ -106,7 +102,7 @@ export default function Todo({dispatch, todo, ACTIONS, setMsg}) {
             > 
             </textarea>
             <button className='enter-btn-update'>
-                <img src={Enter} className='enter-arrow-update' alt="enter"/>
+                <img src={Enter} className={show ? 'enter-arrow-update show' : 'enter-arrow-update'} alt="enter"/>
                 </button>
             </form>
             </li>

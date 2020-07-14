@@ -17,8 +17,8 @@ const ACTIONS ={
         UPDATE_TODO: 'update_todo'
     }
 // New Todo function
-    function newTodo(name){
-        return {id: Date.now(), todo: name, complete:false}
+    function newTodo(todo){
+        return {id: Date.now(), todo: todo, complete:false}
     }
 
 // ─── REDUCER ────────────────────────────────────────────────────────────────────
@@ -29,7 +29,7 @@ const ACTIONS ={
         // ─── NEW TODO ──────────────────────────────────────────────────── 
         case ACTIONS.ADD_TODO:
             // Spred todos ... add new todo
-            let allTodos = [...todos, newTodo(action.payload.name)].sort((a,b)=> b.id - a.id );
+            let allTodos = [...todos, newTodo(action.payload.todo)].sort((a,b)=> b.id - a.id );
             // Save in the local storage
             localStorage.setItem('todos', JSON.stringify(allTodos));
             // Return all todos
@@ -83,12 +83,11 @@ let totalTodos = localStorage.getItem('totalTodos') || 0;
 if(JSON.parse(localStorage.getItem('todos')) !== null){
 JSON.parse(localStorage.getItem('todos')).map(t=>{
     // Push inside array
-    storageArr.push(t);
+   return  storageArr.push(t);
 })
 .sort((a,b)=> b.id - a.id )
 // console.log(storageArr)
 // Set total todos
-// console.log(storageArr.length)
 totalTodos = storageArr.length;
 
 // Save total in the localStorage
@@ -99,7 +98,7 @@ localStorage.setItem('totalTodos', totalTodos)
 const [todos, dispatch] = React.useReducer(Reducer, storageArr)
 
 // State Name and Page
-const [name, setName] = React.useState('');
+const [todo, setTodo] = React.useState('');
 const [page, setPage] = React.useState(1);
 const [noData, setNoData] = React.useState(false);
 
@@ -109,23 +108,23 @@ const [noData, setNoData] = React.useState(false);
 const handleSubmit = (e)=>{
     // Prevent reload
     e.preventDefault()
-    // Check name length
-    if(name.length > 60){
-        setName('')
-        return setMsg(`Name length ${name.length} to long, max 60`);
-    }
-    if(name.length === 0){
-        setName('')
-        return setMsg(`Name length ${name.length} to short, min 4`);
-    }
-    if(name.length <= 5){
-        setName('')
-        return setMsg(`Name length ${name.length} to short, min 4`);
-    }
+   // Check todo name length
+   if(todo.length > 60){
+    setTodo('');
+    return setMsg(`Todo name length ${todo.length} too long, max 60.`)
+}
+if(todo.length === 0){
+    setTodo('');
+    return setMsg(`Todo name length ${todo.length} too short, min 5.`)
+}
+if(todo.length <= 4){
+    setTodo('');
+    return setMsg(`Todo name length ${todo.length} too short, min 5.`)
+}
     // Dispatch
-    dispatch({type: ACTIONS.ADD_TODO, payload:{name:name}})
+    dispatch({type: ACTIONS.ADD_TODO, payload:{todo:todo}})
     // Reset input name
-    setName('')
+    setTodo('')
 }
 
 // ─── PAGINATION ─────────────────────────────────────────────────────────────────
@@ -197,8 +196,8 @@ const handlePrev = (page)=>{
             <form onSubmit={handleSubmit} autoComplete='off'>
                 <input 
                 type="text"
-                value={name}
-                onChange={ e => setName(e.target.value)}
+                value={todo}
+                onChange={ e => setTodo(e.target.value)}
                 placeholder='Add new todo'
                 autoFocus
                 />
@@ -209,7 +208,7 @@ const handlePrev = (page)=>{
                 <div className='list'> 
                   {renderTodos}          
                 </div>
-        {noData ? <img src={Empty} className="empty-img" /> : "" }       
+        {noData ? <img src={Empty} className="empty-img" alt='empty' /> : "" }       
 
         </div>
     )
